@@ -5,52 +5,95 @@
     using System.Linq;
     using System.Reflection;
     using System.Text;
+    using System.Threading;
     using System.Threading.Tasks;
     using ColdWaterLibrary.Enums;
+    using ColdWaterLibrary.Extensions;
+    using ColdWaterLibrary.Integration;
     using Exiled.API.Extensions;
+    using Exiled.CustomItems.API.Features;
     using Exiled.CustomRoles.API.Features;
     using Exiled.Loader;
     using PlayerRoles;
+    using UncomplicatedCustomRoles.API.Interfaces;
 
     /// <summary>
     /// Encapsulates a role type from one of three systems (Uncomplicated Custom Roles, Exiled Custom Roles, Base Game Roles).
     /// </summary>
+    [Serializable]
     public struct OverallRoleType
     {
         #region operators
-        public static bool operator ==(RoleTypeId left, OverallRoleType right)
+        public static implicit operator OverallRoleType(string x)
         {
-            return right == left;
-        }
-
-        public static bool operator !=(RoleTypeId left, OverallRoleType right)
-        {
-            return !(right == left);
-        }
-
-        public static bool operator ==(OverallRoleType left, RoleTypeId right)
-        {
-            if (left.RoleType != TypeSystem.BaseGame)
+            if (int.TryParse(x, out int i))
             {
-                return false;
+                // checks custom roles that use int as ID.
+                if (CustomRole.TryGet((uint)i, out CustomRole exiledCustomRole))
+                {
+                    return exiledCustomRole;
+                }
+                else
+                {
+                    MethodInfo tryGet = UncomplicatedIntegration.CustomRoleType.GetMethod("TryGet");
+                    object[] parameters = new object[] { i, null };
+                    if ((bool)tryGet.Invoke(null, parameters))
+                    {
+                        return (OverallRoleType)parameters[1];
+                    }
+                }
+
+                // As last resort, parse enum for roletypeid
+                if (Enum.TryParse<RoleTypeId>(x, out RoleTypeId roleTypeId))
+                {
+                    return roleTypeId;
+                }
+                else
+                {
+                    return new OverallRoleType(TypeSystem.Unknown, 0);
+                }
             }
 
-            if (left.RoleId != (int)right)
+            IEnumerable<CustomRole> customRoles = CustomRole.Registered.Where(r => r.Name.ToLower() == x.ToLower());
+            if (customRoles.Any())
             {
-                return false;
+                return customRoles.First();
             }
 
-            return true;
+            // TODO:
+            // Finish UCR search w/ reflection.
+            /*
+            if (!UncomplicatedIntegration.IsUcrLoaded)
+            {
+                return new OverallRoleType(TypeSystem.Unknown, 0);
+            }
+
+            PropertyInfo ucrListInfo = UncomplicatedIntegration.CustomRoleType.GetProperty("List");
+            PropertyInfo nameInfo = UncomplicatedIntegration.ICustomRoleInterface.GetProperty("Name");
+            PropertyInfo idInfo = UncomplicatedIntegration.ICustomRoleInterface.GetProperty("Id");
+            var uCustomRoles = (List<object>)ucrListInfo.GetValue(null);
+            uCustomRoles = uCustomRoles.Where(w => (string)nameInfo.GetValue(w) == x).ToList();
+            if (uCustomRoles.Any())
+            {
+                return new OverallRoleType(TypeSystem.Uncomplicated, (int)idInfo.GetValue(uCustomRoles.First()));
+            }
+            */
+            return new OverallRoleType(TypeSystem.Unknown, 0);
         }
 
-        public static bool operator !=(OverallRoleType left, RoleTypeId right)
+        public static implicit operator OverallRoleType(RoleTypeId x)
         {
-            return !(left == right);
+            return new OverallRoleType(TypeSystem.BaseGame, (int)x);
+        }
+
+        public static implicit operator OverallRoleType(CustomRole x)
+        {
+            return new OverallRoleType(TypeSystem.ExiledCustom, (int)x.Id);
         }
 
         public static bool operator ==(OverallRoleType left, OverallRoleType right)
         {
-            if (left.RoleType != right.RoleType)
+            if (left.RoleTypeSystem != right.RoleTypeSystem)
             {
                 return false;
             }
@@ -72,31 +115,11 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="OverallRoleType"/> struct.
         /// </summary>
-        /// <param name="roleTypeId">The <see cref="RoleTypeId"/> to convert.</param>
-        public OverallRoleType(RoleTypeId roleTypeId)
-        {
-            this.RoleType = TypeSystem.BaseGame;
-            this.RoleId = (int)roleTypeId;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="OverallRoleType"/> struct.
-        /// </summary>
-        /// <param name="customRole">The <see cref="CustomRole"/> to convert.</param>
-        public OverallRoleType(CustomRole customRole)
-        {
-            this.RoleType = TypeSystem.ExiledCustom;
-            this.RoleId = (int)customRole.Id;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="OverallRoleType"/> struct.
-        /// </summary>
         /// <param name="id">The ID of the role.</param>
         /// <param name="roleVersion">The <see cref="TypeSystem"> of the role.</param>
         public OverallRoleType(TypeSystem roleVersion, int id)
         {
-            this.RoleType = roleVersion;
+            this.RoleTypeSystem = roleVersion;
             this.RoleId = id;
         }
 
@@ -108,7 +131,7 @@
         /// <summary>
         /// Gets or sets the role system the role originates from.
         /// </summary>
-        public TypeSystem RoleType { get; set; }
+        public TypeSystem RoleTypeSystem { get; set; }
 
         /// <summary>
         /// Gets the name of the underlying role.
@@ -119,7 +142,7 @@
         /// <para></para>or <see cref="null"/>.</returns>
         public readonly string GetName()
         {
-            switch (RoleType)
+            switch (RoleTypeSystem)
             {
                 case TypeSystem.ExiledCustom:
                     if (!CustomRole.TryGet((uint)RoleId, out CustomRole exiledCustomRole))
