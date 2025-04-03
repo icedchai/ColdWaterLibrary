@@ -93,7 +93,7 @@
 
         public static bool operator ==(OverallRoleType left, OverallRoleType right)
         {
-            if (left.RoleTypeSystem != right.RoleTypeSystem)
+            if (left.RoleType != right.RoleType)
             {
                 return false;
             }
@@ -119,7 +119,7 @@
         /// <param name="roleVersion">The <see cref="TypeSystem"> of the role.</param>
         public OverallRoleType(TypeSystem roleVersion, int id)
         {
-            this.RoleTypeSystem = roleVersion;
+            this.RoleType = roleVersion;
             this.RoleId = id;
         }
 
@@ -131,7 +131,7 @@
         /// <summary>
         /// Gets or sets the role system the role originates from.
         /// </summary>
-        public TypeSystem RoleTypeSystem { get; set; }
+        public TypeSystem RoleType { get; set; }
 
         /// <summary>
         /// Gets the name of the underlying role.
@@ -142,7 +142,7 @@
         /// <para></para>or <see cref="null"/>.</returns>
         public readonly string GetName()
         {
-            switch (RoleTypeSystem)
+            switch (RoleType)
             {
                 case TypeSystem.ExiledCustom:
                     if (!CustomRole.TryGet((uint)RoleId, out CustomRole exiledCustomRole))

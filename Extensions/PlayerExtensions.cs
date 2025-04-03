@@ -36,7 +36,7 @@
                     object ucrRoleId = ucrRoleIdProp.GetValue(ucrSumRoleRole);
                     if (ucrSumRole is not null)
                     {
-                        return new OverallRoleType { RoleTypeSystem = TypeSystem.Uncomplicated, RoleId = (int)ucrRoleId };
+                        return new OverallRoleType { RoleType = TypeSystem.Uncomplicated, RoleId = (int)ucrRoleId };
                     }
                 }
             }
@@ -44,15 +44,15 @@
             // Put Exiled CustomRoles here
             if (!player.GetCustomRoles().IsEmpty())
             {
-                return new OverallRoleType { RoleTypeSystem = TypeSystem.ExiledCustom, RoleId = (int)player.GetCustomRoles()[0].Id };
+                return new OverallRoleType { RoleType = TypeSystem.ExiledCustom, RoleId = (int)player.GetCustomRoles()[0].Id };
             }
 
-            return new OverallRoleType { RoleTypeSystem = TypeSystem.BaseGame, RoleId = (int)player.Role.Type };
+            return new OverallRoleType { RoleType = TypeSystem.BaseGame, RoleId = (int)player.Role.Type };
         }
 
         public static bool HasOverallRoleType(this Player player, OverallRoleType roleType)
         {
-            switch (roleType.RoleTypeSystem)
+            switch (roleType.RoleType)
             {
                 case TypeSystem.Uncomplicated:
 
@@ -97,7 +97,7 @@
 
         public static void SetOverallRoleType(this Player player, OverallRoleType roleType)
         {
-            switch (roleType.RoleTypeSystem)
+            switch (roleType.RoleType)
             {
                 case TypeSystem.BaseGame:
                     if (!Enum.TryParse(roleType.RoleId.ToString(), out RoleTypeId baserole))
