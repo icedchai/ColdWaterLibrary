@@ -24,5 +24,9 @@
         /// Created by Northwood as part of basegame.
         /// </summary>
         BaseGame = 3,
+
+        UcrRole = Uncomplicated,
+        CrRole = ExiledCustom,
+        BaseGameRole = BaseGame,
     }
 }
