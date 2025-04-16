@@ -147,7 +147,7 @@
                 case TypeSystem.ExiledCustom:
                     if (!CustomRole.TryGet((uint)RoleId, out CustomRole exiledCustomRole))
                     {
-                        return null;
+                        return string.Empty;
                     }
 
                     return exiledCustomRole.Name;
@@ -155,23 +155,19 @@
                     RoleTypeId roleTypeId;
                     if (!Enum.TryParse(RoleId.ToString(), out roleTypeId))
                     {
-                        return null;
+                        return string.Empty;
                     }
 
                     return roleTypeId.GetFullName();
 
-                // TODO: Add UCR name getter.
                 case TypeSystem.Uncomplicated:
-                    Assembly UcrAssembly = Loader.Plugins.FirstOrDefault(p => p.Name is "UncomplicatedCustomRoles")?.Assembly;
-                    if (UcrAssembly is null)
+                    if (!UncomplicatedIntegration.IsUcrLoaded)
                     {
-                        return null;
+                        return string.Empty;
                     }
 
-                    Type customrtype = UcrAssembly.GetType("UncomplicatedCustomRoles.API.Features.CustomRole");
-                    Type icustomrtype = UcrAssembly.GetType("UncomplicatedCustomRoles.API.Interfaces.ICustomRole");
-                    PropertyInfo nameInfo = icustomrtype.GetProperty("Name");
-                    MethodInfo summonedCustomRoleGet = customrtype.GetMethod("TryGet", new Type[] { typeof(int), icustomrtype.MakeByRefType() });
+                    PropertyInfo nameInfo = UncomplicatedIntegration.ICustomRoleInterface.GetProperty("Name");
+                    MethodInfo summonedCustomRoleGet = UncomplicatedIntegration.CustomRoleType.GetMethod("TryGet", new Type[] { typeof(int), UncomplicatedIntegration.ICustomRoleInterface.MakeByRefType() });
                     object[] parameters = new object[] { RoleId, null };
                     if ((bool)summonedCustomRoleGet.Invoke(null, parameters))
                     {
