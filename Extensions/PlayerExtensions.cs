@@ -52,18 +52,22 @@
 
         public static bool HasOverallRoleType(this Player player, OverallRoleType roleType)
         {
+            object ucrSumRole = null;
+            if (!UncomplicatedIntegration.IsUcrLoaded)
+            {
+                if (roleType.RoleType == TypeSystem.Uncomplicated)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                MethodInfo summonedCustomRoleGet = UncomplicatedIntegration.SummonedCustomRoleType.GetMethod("Get", new Type[] { typeof(Player) });
+                ucrSumRole = summonedCustomRoleGet.Invoke(null, new object[] { player });
+            }
             switch (roleType.RoleType)
             {
                 case TypeSystem.Uncomplicated:
-
-                    if (!UncomplicatedIntegration.IsUcrLoaded)
-                    {
-                        Log.Info("At PlayerExtensions.HasOverallRole, UCR is NOT installed and the code for checking UCR roles will therefore not run.");
-                        return false;
-                    }
-
-                    MethodInfo summonedCustomRoleGet = UncomplicatedIntegration.SummonedCustomRoleType.GetMethod("Get", new Type[] { typeof(Player) });
-                    object ucrSumRole = summonedCustomRoleGet.Invoke(null, new object[] { player });
                     if (ucrSumRole is null) return false;
                     PropertyInfo ucrRoleProp = ucrSumRole.GetType().GetProperty("Role");
                     object ucrSumRoleRole = ucrRoleProp.GetValue(ucrSumRole);
@@ -72,11 +76,19 @@
 
                     return (int)ucrRoleId == roleType.RoleId;
                 case TypeSystem.ExiledCustom:
-                    if (player.GetCustomRoles().IsEmpty()) return false;
+                    if (player.GetCustomRoles().IsEmpty())
+                    {
+                        return false;
+                    }
+
                     CustomRole.TryGet((uint)roleType.RoleId, out CustomRole cr);
                     return cr is not null && player.GetCustomRoles().Contains(cr);
                 case TypeSystem.BaseGame:
-                    if (!Enum.TryParse($"{roleType.RoleId}", out RoleTypeId roleid) || !player.GetCustomRoles().IsEmpty()) return false;
+                    if (!Enum.TryParse($"{roleType.RoleId}", out RoleTypeId roleid) || !player.GetCustomRoles().IsEmpty() || ucrSumRole is not null)
+                    {
+                        return false;
+                    }
+
                     return player.Role.Type == roleid;
                 default: return false;
             }
