@@ -26,6 +26,23 @@
         #region operators
         public static implicit operator OverallRoleType(string x)
         {
+            string[] split = x.Split(':');
+            if (split.Length > 1)
+            {
+                if (Enum.TryParse(split[0], true, out TypeSystem typesystem))
+                {
+                    if (int.TryParse(split[1], out int id))
+                    {
+                        return new OverallRoleType { RoleId = id, RoleType = typesystem };
+                    }
+                }
+            }
+
+            if (Enum.TryParse(x, true, out RoleTypeId result))
+            {
+                return result;
+            }
+
             if (int.TryParse(x, out int i))
             {
                 // checks custom roles that use int as ID.
@@ -43,15 +60,7 @@
                     }
                 }
 
-                // As last resort, parse enum for roletypeid
-                if (Enum.TryParse<RoleTypeId>(x, out RoleTypeId roleTypeId))
-                {
-                    return roleTypeId;
-                }
-                else
-                {
-                    return new OverallRoleType(TypeSystem.Unknown, 0);
-                }
+                return new OverallRoleType(TypeSystem.Unknown, 0);
             }
 
             IEnumerable<CustomRole> customRoles = CustomRole.Registered.Where(r => r.Name.ToLower() == x.ToLower());
