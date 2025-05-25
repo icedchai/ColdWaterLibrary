@@ -1,4 +1,4 @@
-﻿namespace ColdWaterLibrary.Features.Enums
+﻿namespace ColdWaterLibrary.Core.Features.Enums
 {
     /// <summary>
     /// Represents what system a given thing comes from.

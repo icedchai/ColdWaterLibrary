@@ -1,4 +1,4 @@
-﻿namespace ColdWaterLibrary.Extensions
+﻿namespace ColdWaterLibrary.Core.Features.Extensions
 {
     using System;
     using System.Collections.Generic;
@@ -6,9 +6,9 @@
     using System.Reflection;
     using System.Text;
     using System.Threading.Tasks;
-    using ColdWaterLibrary.Enums;
-    using ColdWaterLibrary.Integration;
-    using ColdWaterLibrary.Features;
+    using ColdWaterLibrary.Core.Features.Enums;
+    using ColdWaterLibrary.Core.Integration;
+    using ColdWaterLibrary.Core.Features;
     using Exiled.API.Features;
     using Exiled.API.Features.Roles;
     using Exiled.CustomRoles.API;
@@ -18,6 +18,7 @@
     using PlayerRoles;
     using RemoteAdmin.Communication;
     using LabPlayer = LabApi.Features.Wrappers.Player;
+    using ColdWaterLibrary.Core.Features.Wrappers;
 
     /// <summary>
     /// <see cref="Player"/> extensions for ColdWaterLib.
@@ -28,8 +29,19 @@
         {
             if (UncomplicatedIntegration.IsUcrLoaded)
             {
-                MethodInfo summonedCustomRoleGet = UncomplicatedIntegration.SummonedCustomRoleType.GetMethod("Get", new Type[] { typeof(Player) });
-                object ucrSumRole = summonedCustomRoleGet.Invoke(null, new object[] { player });
+                MethodInfo summonedCustomRoleGet = UncomplicatedIntegration.SummonedCustomRoleType.GetMethod("Get", new Type[] { typeof(LabPlayer) });
+                object ucrSumRole;
+                if (summonedCustomRoleGet is null)
+                {
+                    summonedCustomRoleGet = UncomplicatedIntegration.SummonedCustomRoleType.GetMethod("Get", new Type[] { typeof(Player) });
+                    ucrSumRole = summonedCustomRoleGet.Invoke(null, new object[] { player });
+                }
+                else
+                {
+                    LabPlayer labPlayer = LabPlayer.Get(player.ReferenceHub);
+                    ucrSumRole = summonedCustomRoleGet.Invoke(null, new object[] { labPlayer });
+                }
+
                 if (ucrSumRole is not null)
                 {
                     PropertyInfo ucrRoleProp = ucrSumRole.GetType().GetProperty("Role");

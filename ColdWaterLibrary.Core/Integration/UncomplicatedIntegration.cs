@@ -1,4 +1,4 @@
-﻿namespace ColdWaterLibrary.Integration
+﻿namespace ColdWaterLibrary.Core.Integration
 {
     using Exiled.Loader;
     using System;
@@ -8,7 +8,7 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    public static class UncomplicatedIntegration
+    internal static class UncomplicatedIntegration
     {
         private static bool triedLoadingUcr = false;
 
@@ -38,6 +38,7 @@
         /// Gets the reflected class UncomplicatedCustomRoles.API.Features.CustomRole.
         /// </summary>
         public static Type CustomRoleType { get; internal set; }
+
         /// <summary>
         /// Gets the reflected interface UncomplicatedCustomRoles.API.Interfaces.ICustomRole.
         /// </summary>

@@ -1,4 +1,4 @@
-﻿namespace ColdWaterLibrary.Features.Wrappers
+﻿namespace ColdWaterLibrary.Core.Features.Wrappers
 {
     using System;
     using System.Collections.Generic;
@@ -7,14 +7,13 @@
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
-    using ColdWaterLibrary.Features.Enums;
-    using ColdWaterLibrary.Integration;
+    using ColdWaterLibrary.Core.Features.Enums;
+    using ColdWaterLibrary.Core.Integration;
     using Exiled.API.Extensions;
     using Exiled.CustomItems.API.Features;
     using Exiled.CustomRoles.API.Features;
     using Exiled.Loader;
     using PlayerRoles;
-    using UncomplicatedCustomRoles.API.Interfaces;
 
     /// <summary>
     /// Encapsulates a role type from one of three systems (Uncomplicated Custom Roles, Exiled Custom Roles, Base Game Roles).

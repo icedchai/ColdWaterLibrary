@@ -1,11 +1,11 @@
-﻿namespace ColdWaterLibrary.Features.Wrappers
+﻿namespace ColdWaterLibrary.Core.Features.Wrappers
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
-    using ColdWaterLibrary.Features.Enums;
+    using ColdWaterLibrary.Core.Features.Enums;
 
     /// <summary>
     /// Encapsulates an item type from one of three systems (Uncomplicated Custom Items, Exiled Custom Items, Base Game Items).
@@ -49,6 +49,7 @@
             return !(left == right);
         }
         #endregion
+
         /// <summary>
         /// Initializes a new instance of the <see cref="OverallItemType"/> struct.
         /// </summary>
