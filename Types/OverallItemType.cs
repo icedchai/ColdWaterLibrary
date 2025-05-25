@@ -1,11 +1,11 @@
-﻿namespace ColdWaterLibrary.Types
+﻿namespace ColdWaterLibrary.Features.Wrappers
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
-    using ColdWaterLibrary.Enums;
+    using ColdWaterLibrary.Features.Enums;
 
     /// <summary>
     /// Encapsulates an item type from one of three systems (Uncomplicated Custom Items, Exiled Custom Items, Base Game Items).

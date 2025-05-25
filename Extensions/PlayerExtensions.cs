@@ -8,7 +8,7 @@
     using System.Threading.Tasks;
     using ColdWaterLibrary.Enums;
     using ColdWaterLibrary.Integration;
-    using ColdWaterLibrary.Types;
+    using ColdWaterLibrary.Features;
     using Exiled.API.Features;
     using Exiled.API.Features.Roles;
     using Exiled.CustomRoles.API;
@@ -16,6 +16,8 @@
     using Exiled.Events.EventArgs.Player;
     using Exiled.Loader;
     using PlayerRoles;
+    using RemoteAdmin.Communication;
+    using LabPlayer = LabApi.Features.Wrappers.Player;
 
     /// <summary>
     /// <see cref="Player"/> extensions for ColdWaterLib.
@@ -62,9 +64,20 @@
             }
             else
             {
-                MethodInfo summonedCustomRoleGet = UncomplicatedIntegration.SummonedCustomRoleType.GetMethod("Get", new Type[] { typeof(Player) });
-                ucrSumRole = summonedCustomRoleGet.Invoke(null, new object[] { player });
+                MethodInfo summonedCustomRoleGet = UncomplicatedIntegration.SummonedCustomRoleType.GetMethod("Get", new Type[] { typeof(LabPlayer) });
+                if (summonedCustomRoleGet is null)
+                {
+                    summonedCustomRoleGet = UncomplicatedIntegration.SummonedCustomRoleType.GetMethod("Get", new Type[] { typeof(Player) });
+                    ucrSumRole = summonedCustomRoleGet.Invoke(null, new object[] { player });
+                }
+                else
+                {
+                    LabPlayer labPlayer = LabPlayer.Get(player.ReferenceHub);
+                    ucrSumRole = summonedCustomRoleGet.Invoke(null, new object[] { labPlayer });
+                }
+
             }
+
             switch (roleType.RoleType)
             {
                 case TypeSystem.Uncomplicated:
@@ -94,7 +107,7 @@
             }
         }
 
-        public static bool HasOverallRoleType(this Player player, List<OverallRoleType> roleType)
+        public static bool HasOverallRoleType(this Player player, IEnumerable<OverallRoleType> roleType)
         {
             foreach (OverallRoleType role in roleType)
             {
@@ -126,8 +139,17 @@
                         return;
                     }
 
-                    MethodInfo setCustomRole = UncomplicatedIntegration.UcrPlayerExtensionType.GetMethod("SetCustomRole", new Type[] { typeof(Player), typeof(int) });
-                    setCustomRole.Invoke(null, new object[] { player, roleType.RoleId });
+                    MethodInfo setCustomRole = UncomplicatedIntegration.UcrPlayerExtensionType.GetMethod("SetCustomRole", new Type[] { typeof(LabPlayer), typeof(int) });
+                    if (setCustomRole is null)
+                    {
+                        UncomplicatedIntegration.UcrPlayerExtensionType.GetMethod("SetCustomRole", new Type[] { typeof(Player), typeof(int) });
+                        setCustomRole.Invoke(null, new object[] { player, roleType.RoleId });
+                    }
+                    else
+                    {
+                        LabPlayer labPlayer = LabPlayer.Get(player.ReferenceHub);
+                        setCustomRole.Invoke(null, new object[] { labPlayer, roleType.RoleId });
+                    }
 
                     // player.SetCustomRole(roleType.RoleId);
                     break;

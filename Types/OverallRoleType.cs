@@ -1,4 +1,4 @@
-﻿namespace ColdWaterLibrary.Types
+﻿namespace ColdWaterLibrary.Features.Wrappers
 {
     using System;
     using System.Collections.Generic;
@@ -7,8 +7,7 @@
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
-    using ColdWaterLibrary.Enums;
-    using ColdWaterLibrary.Extensions;
+    using ColdWaterLibrary.Features.Enums;
     using ColdWaterLibrary.Integration;
     using Exiled.API.Extensions;
     using Exiled.CustomItems.API.Features;
@@ -26,8 +25,9 @@
         #region operators
         public static implicit operator OverallRoleType(string x)
         {
+            OverallRoleType nullRole = new OverallRoleType(TypeSystem.Unknown, 0);
             string[] split = x.Split(':');
-            if (split.Length > 1)
+            if (split.Length > 1) 
             {
                 if (Enum.TryParse(split[0], true, out TypeSystem typesystem))
                 {
@@ -35,6 +35,14 @@
                     {
                         return new OverallRoleType { RoleId = id, RoleType = typesystem };
                     }
+                    else
+                    {
+                        return nullRole;
+                    }
+                }
+                else
+                {
+                    return nullRole;
                 }
             }
 
@@ -60,7 +68,7 @@
                     }
                 }
 
-                return new OverallRoleType(TypeSystem.Unknown, 0);
+                return nullRole;
             }
 
             IEnumerable<CustomRole> customRoles = CustomRole.Registered.Where(r => r.Name.ToLower() == x.ToLower());
@@ -87,7 +95,7 @@
                 return new OverallRoleType(TypeSystem.Uncomplicated, (int)idInfo.GetValue(uCustomRoles.First()));
             }
             */
-            return new OverallRoleType(TypeSystem.Unknown, 0);
+            return nullRole;
         }
 
         public static implicit operator OverallRoleType(RoleTypeId x)

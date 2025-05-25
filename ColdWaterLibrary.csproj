@@ -40,6 +40,9 @@
       <HintPath>packages\ExMod.Exiled.9.6.0\lib\net48\Assembly-CSharp-Publicized.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="AudioPlayerApi">
+      <HintPath>..\..\dependancies\plugins\AudioPlayerApi.dll</HintPath>
+    </Reference>
     <Reference Include="CommandSystem.Core, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\ExMod.Exiled.9.6.0\lib\net48\CommandSystem.Core.dll</HintPath>
     </Reference>
@@ -93,12 +96,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Enums\TypeSystem.cs" />
+    <Compile Include="Features\Enums\TypeSystem.cs" />
     <Compile Include="Integration\UncomplicatedIntegration.cs" />
-    <Compile Include="Types\CustomAnnouncement.cs" />
-    <Compile Include="Types\OverallItemType.cs" />
-    <Compile Include="Types\OverallRoleType.cs" />
-    <Compile Include="Extensions\PlayerExtensions.cs" />
+    <Compile Include="Features\Wrappers\OverallItemType.cs" />
+    <Compile Include="Features\Wrappers\OverallRoleType.cs" />
+    <Compile Include="Features\Extensions\PlayerExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -108,6 +110,9 @@
   <ItemGroup>
     <Analyzer Include="packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
