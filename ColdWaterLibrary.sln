@@ -8,7 +8,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColdWaterLibrary.Core", "ColdWaterLibrary.Core\ColdWaterLibrary.Core.csproj", "{78A24B67-1ADB-44EE-93E8-0AF823F1F11E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColdWaterLibrary", "ColdWaterLibrary\ColdWaterLibrary.csproj", "{78A24B67-1ADB-44EE-93E8-0AF823F1F11E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColdWaterLibrary.Audio", "ColdWaterLibrary.Audio\ColdWaterLibrary.Audio.csproj", "{DE21F2E6-4298-495F-AD00-D9E2898780FB}"
 EndProject

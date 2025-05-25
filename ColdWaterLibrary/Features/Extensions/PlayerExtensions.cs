@@ -1,4 +1,4 @@
-﻿namespace ColdWaterLibrary.Core.Features.Extensions
+﻿namespace ColdWaterLibrary.Features.Extensions
 {
     using System;
     using System.Collections.Generic;
@@ -6,9 +6,9 @@
     using System.Reflection;
     using System.Text;
     using System.Threading.Tasks;
-    using ColdWaterLibrary.Core.Features.Enums;
-    using ColdWaterLibrary.Core.Integration;
-    using ColdWaterLibrary.Core.Features;
+    using ColdWaterLibrary.Features.Enums;
+    using ColdWaterLibrary.Integration;
+    using ColdWaterLibrary.Features;
     using Exiled.API.Features;
     using Exiled.API.Features.Roles;
     using Exiled.CustomRoles.API;
@@ -18,7 +18,7 @@
     using PlayerRoles;
     using RemoteAdmin.Communication;
     using LabPlayer = LabApi.Features.Wrappers.Player;
-    using ColdWaterLibrary.Core.Features.Wrappers;
+    using ColdWaterLibrary.Features.Wrappers;
 
     /// <summary>
     /// <see cref="Player"/> extensions for ColdWaterLib.
@@ -26,7 +26,7 @@
     public static class PlayerExtensions
     {
         public static OverallRoleType GetOverallRoleType(this Player player)
-        {
+        { 
             if (UncomplicatedIntegration.IsUcrLoaded)
             {
                 MethodInfo summonedCustomRoleGet = UncomplicatedIntegration.SummonedCustomRoleType.GetMethod("Get", new Type[] { typeof(LabPlayer) });

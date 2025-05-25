@@ -1,4 +1,4 @@
-﻿namespace ColdWaterLibrary.Core.Features.Wrappers
+﻿namespace ColdWaterLibrary.Features.Wrappers
 {
     using System;
     using System.Collections.Generic;
@@ -7,8 +7,8 @@
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
-    using ColdWaterLibrary.Core.Features.Enums;
-    using ColdWaterLibrary.Core.Integration;
+    using ColdWaterLibrary.Features.Enums;
+    using ColdWaterLibrary.Integration;
     using Exiled.API.Extensions;
     using Exiled.CustomItems.API.Features;
     using Exiled.CustomRoles.API.Features;

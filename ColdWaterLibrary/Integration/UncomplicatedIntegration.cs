@@ -1,4 +1,4 @@
-﻿namespace ColdWaterLibrary.Core.Integration
+﻿namespace ColdWaterLibrary.Integration
 {
     using Exiled.Loader;
     using System;

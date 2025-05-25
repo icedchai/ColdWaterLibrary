@@ -7,8 +7,8 @@
     <ProjectGuid>{78A24B67-1ADB-44EE-93E8-0AF823F1F11E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ColdWaterLibrary.Core</RootNamespace>
-    <AssemblyName>ColdWaterLibrary.Core</AssemblyName>
+    <RootNamespace>ColdWaterLibrary</RootNamespace>
+    <AssemblyName>ColdWaterLibrary</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <LangVersion>12</LangVersion>
     <FileAlignment>512</FileAlignment>
@@ -104,8 +104,6 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Features\Helpers\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
