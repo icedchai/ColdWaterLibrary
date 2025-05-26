@@ -38,6 +38,9 @@
     <Reference Include="Assembly-CSharp-Publicized">
       <HintPath>..\..\..\dependancies\EXILEDREF\Assembly-CSharp-Publicized.dll</HintPath>
     </Reference>
+    <Reference Include="AudioPlayerApi">
+      <HintPath>..\..\..\dependancies\plugins\AudioPlayerApi.dll</HintPath>
+    </Reference>
     <Reference Include="CommandSystem.Core, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ExMod.Exiled.9.6.0\lib\net48\CommandSystem.Core.dll</HintPath>
     </Reference>
@@ -91,6 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Features\Enums\TypeSystem.cs" />
+    <Compile Include="Features\Helpers\SoundHelper.cs" />
     <Compile Include="Integration\UncomplicatedIntegration.cs" />
     <Compile Include="Features\Wrappers\OverallItemType.cs" />
     <Compile Include="Features\Wrappers\OverallRoleType.cs" />
