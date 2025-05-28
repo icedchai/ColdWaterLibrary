@@ -22,6 +22,8 @@
     public struct OverallRoleType
     {
         #region operators
+        public static implicit operator string(OverallRoleType type) => type.ToString();
+
         public static implicit operator OverallRoleType(string x)
         {
             string[] split = x.Split(':');

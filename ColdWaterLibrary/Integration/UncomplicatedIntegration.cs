@@ -57,6 +57,10 @@
         private static void ReflectUncomplicated()
         {
             UcrAssembly = Loader.Plugins.FirstOrDefault(p => p.Name is "UncomplicatedCustomRoles")?.Assembly;
+            if (UcrAssembly is null)
+            {
+                UcrAssembly = LabApi.Loader.PluginLoader.Plugins.FirstOrDefault(p => p.Key.Name is "UncomplicatedCustomRoles").Value;
+            }
             if (UcrAssembly is not null)
             {
                 CustomRoleType = UcrAssembly.GetType("UncomplicatedCustomRoles.API.Features.CustomRole");

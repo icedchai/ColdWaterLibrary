@@ -154,7 +154,7 @@
                     MethodInfo setCustomRole = UncomplicatedIntegration.UcrPlayerExtensionType.GetMethod("SetCustomRole", new Type[] { typeof(LabPlayer), typeof(int) });
                     if (setCustomRole is null)
                     {
-                        UncomplicatedIntegration.UcrPlayerExtensionType.GetMethod("SetCustomRole", new Type[] { typeof(Player), typeof(int) });
+                        setCustomRole = UncomplicatedIntegration.UcrPlayerExtensionType.GetMethod("SetCustomRole", new Type[] { typeof(Player), typeof(int) });
                         setCustomRole.Invoke(null, new object[] { player, roleType.RoleId });
                     }
                     else
@@ -162,7 +162,6 @@
                         LabPlayer labPlayer = LabPlayer.Get(player.ReferenceHub);
                         setCustomRole.Invoke(null, new object[] { labPlayer, roleType.RoleId });
                     }
-
                     // player.SetCustomRole(roleType.RoleId);
                     break;
                 case TypeSystem.ExiledCustom:
