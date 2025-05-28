@@ -24,8 +24,8 @@
         #region operators
         public static implicit operator OverallRoleType(string x)
         {
-            OverallRoleType nullRole = new OverallRoleType(TypeSystem.Unknown, 0);
             string[] split = x.Split(':');
+
             if (split.Length > 1) 
             {
                 if (Enum.TryParse(split[0], true, out TypeSystem typesystem))
@@ -36,12 +36,12 @@
                     }
                     else
                     {
-                        return nullRole;
+                        return NullRole;
                     }
                 }
                 else
                 {
-                    return nullRole;
+                    return NullRole;
                 }
             }
 
@@ -67,7 +67,7 @@
                     }
                 }
 
-                return nullRole;
+                return NullRole;
             }
 
             IEnumerable<CustomRole> customRoles = CustomRole.Registered.Where(r => r.Name.ToLower() == x.ToLower());
@@ -94,7 +94,7 @@
                 return new OverallRoleType(TypeSystem.Uncomplicated, (int)idInfo.GetValue(uCustomRoles.First()));
             }
             */
-            return nullRole;
+            return NullRole;
         }
 
         public static implicit operator OverallRoleType(RoleTypeId x)
@@ -156,7 +156,7 @@
         /// <para></para>For <see cref="TypeSystem.ExiledCustom"/>: <see cref="CustomRole"/> : Name.
         /// <para></para>For <see cref="TypeSystem.Uncomplicated"/>: ICustomRole : Name.
         /// <para></para>or <see cref="null"/>.</returns>
-        public readonly string GetName()
+        public string GetName()
         {
             switch (RoleType)
             {
@@ -213,5 +213,15 @@
             return base.GetHashCode();
         }
 
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return $"{RoleType}:{RoleId}";
+        }
+
+        /// <summary>
+        /// Gets a role with <see cref="TypeSystem.Unknown"/> and RoleId of <see cref="0"/>.
+        /// </summary>
+        public static OverallRoleType NullRole => new OverallRoleType(TypeSystem.Unknown, 0);
     }
 }
